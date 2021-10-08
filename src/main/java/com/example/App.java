@@ -23,15 +23,20 @@ public class App
             many(mongoClient);
             a.delete(mongoClient);
             update(mongoClient);
-            rintall(mongoClient);
+            printall(mongoClient);
             find(mongoClient);
         }
 
     }*/
 
-    public FindIterable<Document> findadmin(MongoClient mongoClient, String s,String s2) {
+    public FindIterable<Document> finduser(MongoClient mongoClient, String s) {
         MongoCollection<Document> record = mongoClient.getDatabase("test").getCollection("person");
-        FindIterable<Document> res = record.find(new BasicDBObject("name",s).append("password",s2));
+        FindIterable<Document> res = record.find(new BasicDBObject("name",s));
+        return res;
+    }
+    public FindIterable<Document> findlogin(MongoClient mongoClient, String s,String s1) {
+        MongoCollection<Document> record = mongoClient.getDatabase("test").getCollection("person");
+        FindIterable<Document> res = record.find(new BasicDBObject("name",s).append("password",s1));
         return res;
     }
 

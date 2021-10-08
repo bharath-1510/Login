@@ -1,10 +1,8 @@
 package com.example;
-import com.mongodb.DBCursor;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import org.bson.Document;
-
 import  java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,6 +22,7 @@ public class First {
         f.setLayout(null);
         f.setBounds(0,0,1366,768);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setResizable(false);
         f.setVisible(true);
         JPanel p1 = new JPanel();
         p1.setBounds(117, 223, 320, 200);
@@ -79,9 +78,9 @@ public class First {
                 int p = 0;
                 String s1 = t1.getText();
                 FindIterable<Document> res;
-                Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+                Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING   );
                 try (MongoClient mongoClient = MongoClients.create(s)) {
-                    res = new App().findadmin(mongoClient, s1, pwd);
+                    res = new App().findlogin(mongoClient, s1,pwd);
                     Iterator it = res.iterator();
                     while (it.hasNext()) {
                         p = 1;
@@ -141,7 +140,7 @@ public class First {
                 FindIterable<Document> res;
                 Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
                 try (MongoClient mongoClient = MongoClients.create(s)) {
-                    res = new App().findadmin(mongoClient, s1,pwd);
+                    res = new App().finduser(mongoClient,s1);
                     Iterator it = res.iterator();
                     while (it.hasNext()) {
                         p=1;
@@ -156,7 +155,7 @@ public class First {
                         t4.setText("");
                     }
                     else {
-                        JOptionPane.showMessageDialog(null, "Registration Failed");
+                        JOptionPane.showMessageDialog(null, "Registration Failed or Already Account Exists");
                         t3.setText("");
                         t4.setText("");
                     }
