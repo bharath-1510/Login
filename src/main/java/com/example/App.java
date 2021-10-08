@@ -24,7 +24,8 @@ public class App
             a.delete(mongoClient);
             update(mongoClient);
             printall(mongoClient);
-            find(mongoClient);
+            finduser(mongoClient,s,s1);
+            findadmin(mongoClient,s,s1);
         }
 
     }*/
