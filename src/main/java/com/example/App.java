@@ -11,29 +11,31 @@ import java.util.logging.Logger;
 public class App
 {
 
-    public static void main( String[] args )
+    /*public static void main( String[] args )
     {
+        App a = new App();
         Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
         String s = "mongodb+srv://Bharath:bharath12345678@movie.jeait.mongodb.net/test?retryWrites=true&w=majority";
         try(MongoClient mongoClient = MongoClients.create(s))
         {
-            //printDatabases(mongoClient);
-            //insert(mongoClient);
-            //many(mongoClient);
-            //delete(mongoClient);
-            //update(mongoClient);
-            //printall(mongoClient);
+            printDatabases(mongoClient);
+            insert(mongoClient);
+            many(mongoClient);
+            a.delete(mongoClient);
+            update(mongoClient);
+            rintall(mongoClient);
             find(mongoClient);
         }
 
-    }
+    }*/
 
-    private static void find(MongoClient mongoClient) {
+    public FindIterable<Document> findadmin(MongoClient mongoClient, String s,String s2) {
         MongoCollection<Document> record = mongoClient.getDatabase("test").getCollection("person");
-        
+        FindIterable<Document> res = record.find(new BasicDBObject("name",s).append("password",s2));
+        return res;
     }
 
-    private static void printall(MongoClient mongoClient) {
+    public void printall(MongoClient mongoClient) {
         MongoCollection<Document> record = mongoClient.getDatabase("test").getCollection("person");
         FindIterable<Document> iterDoc = record.find();
         int i = 1;
@@ -45,17 +47,17 @@ public class App
         }
     }
 
-    private static void update(MongoClient mongoClient) {
+    public void update(MongoClient mongoClient) {
         MongoCollection<Document> record = mongoClient.getDatabase("test").getCollection("person");
         record.updateMany(new Document(), Updates.set("Value ",3+""));
     }
 
-    private static void delete(MongoClient mongoClient) {
+    public void delete(MongoClient mongoClient) {
         MongoCollection<Document> record = mongoClient.getDatabase("test").getCollection("person");
         record.deleteMany(new Document());
     }
 
-    private static void many(MongoClient mongoClient) {
+    public void many(MongoClient mongoClient) {
         MongoCollection<Document> record = mongoClient.getDatabase("test").getCollection("person");
         List<Document> doc = new ArrayList<>();
         for (int i=2;i<10;i++)
@@ -63,13 +65,15 @@ public class App
         record.insertMany(doc);
     }
 
-    private static void insert(MongoClient mongoClient) {
+    public void insertadmin(MongoClient mongoClient,String s,String s2) {
         MongoCollection<Document> record = mongoClient.getDatabase("test").getCollection("person");
-        Document doc = new Document("name","Mine1");
+        Document doc = new Document("name",s)
+                .append("password",s2);
+
         record.insertOne(doc);
     }
 
-    private static void printDatabases(MongoClient mongoClient) {
+    public void printDatabases(MongoClient mongoClient) {
         List<Document> db = mongoClient.listDatabases().into(new ArrayList<>());
         db.forEach(document -> System.out.println(document.toJson()));
     }

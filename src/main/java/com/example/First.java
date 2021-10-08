@@ -1,12 +1,22 @@
 package com.example;
+import com.mongodb.DBCursor;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import org.bson.Document;
+
 import  java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 public class First {
     JTextField t1,t3;
     JPasswordField t2,t4;
     JFrame f;
+    String s = "mongodb+srv://Bharath:bharath12345678@movie.jeait.mongodb.net/test?retryWrites=true&w=majority";
     First()
     {
         f = new JFrame();
@@ -66,15 +76,30 @@ public class First {
         b4.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String pwd = new String(t2.getPassword());
-                String s=t1.getText();
-                if(t1.getText().equals("bharath@gmail.com") && pwd.equals("bharath@123"))
-                {
-                    s=t1.getText();
-                    JOptionPane.showMessageDialog(null,"Login Success");
-                    f.setVisible(false);
+                int p = 0;
+                String s1 = t1.getText();
+                FindIterable<Document> res;
+                Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+                try (MongoClient mongoClient = MongoClients.create(s)) {
+                    res = new App().findadmin(mongoClient, s1, pwd);
+                    Iterator it = res.iterator();
+                    while (it.hasNext()) {
+                        p = 1;
+                        break;
+                    }
+                    if (p == 1) {
+                        JOptionPane.showMessageDialog(null, "Login Success");
+                        f.setVisible(false);
+                        t3.setText("");
+                        t4.setText("");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Login Failed or Check Registration");
+                        t3.setText("");
+                        t4.setText("");
+                        p2.setVisible(false);
+                        p3.setVisible(true);
+                    }
                 }
-                else
-                    JOptionPane.showMessageDialog(null,"Login Failed");
             }
         });
         b4.setFont(new Font("Times New Roman", Font.PLAIN, 19));
@@ -110,16 +135,32 @@ public class First {
         JButton b3 = new JButton("Register");
         b3.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                int p=0;
                 String pwd = new String(t4.getPassword());
-                String s=t3.getText();
-                if(s.equals("bharath@gmail.com") && pwd.equals("bharath@123"))
-                {
-                    JOptionPane.showMessageDialog(null,"Registration Success");
-                    p3.setVisible(false);
-                    p2.setVisible(true);
+                String s1=t3.getText();
+                FindIterable<Document> res;
+                Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
+                try (MongoClient mongoClient = MongoClients.create(s)) {
+                    res = new App().findadmin(mongoClient, s1,pwd);
+                    Iterator it = res.iterator();
+                    while (it.hasNext()) {
+                        p=1;
+                        break;
+                    }
+                    if(p==0) {
+                        new App().insertadmin(mongoClient, s1,pwd);
+                        JOptionPane.showMessageDialog(null, "Registration Success");
+                        p3.setVisible(false);
+                        p2.setVisible(true);
+                        t3.setText("");
+                        t4.setText("");
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null, "Registration Failed");
+                        t3.setText("");
+                        t4.setText("");
+                    }
                 }
-                else
-                    JOptionPane.showMessageDialog(null,"Registration Failed");
             }
         });
         b3.setFont(new Font("Times New Roman", Font.PLAIN, 19));
@@ -151,6 +192,7 @@ public class First {
     }
     public static void main(String a[])
     {
+
         new First();
     }
 }
