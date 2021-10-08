@@ -43,6 +43,8 @@ public class First {
             public void actionPerformed(ActionEvent e) {
                 p2.setVisible(true);
                 p3.setVisible(false);
+                t3.setText("");
+                t4.setText("");
             }
         });
         b1.setFont(new Font("Times New Roman", Font.PLAIN, 19));
@@ -54,6 +56,8 @@ public class First {
             public void actionPerformed(ActionEvent e) {
                 p2.setVisible(false);
                 p3.setVisible(true);
+                t1.setText("");
+                t2.setText("");
             }
         });
         b2.setFont(new Font("Times New Roman", Font.PLAIN, 19));
@@ -89,12 +93,12 @@ public class First {
                     if (p == 1) {
                         JOptionPane.showMessageDialog(null, "Login Success");
                         f.setVisible(false);
-                        t3.setText("");
-                        t4.setText("");
+                        t1.setText("");
+                        t2.setText("");
                     } else {
                         JOptionPane.showMessageDialog(null, "Login Failed or Check Registration");
-                        t3.setText("");
-                        t4.setText("");
+                        t1.setText("");
+                        t2.setText("");
                         p2.setVisible(false);
                         p3.setVisible(true);
                     }
