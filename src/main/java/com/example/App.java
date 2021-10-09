@@ -1,8 +1,12 @@
 package com.example;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.*;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
+import org.bson.conversions.Bson;
+
+import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -11,24 +15,24 @@ import java.util.logging.Logger;
 public class App
 {
 
-    /*public static void main( String[] args )
+    public static void main( String[] args )
     {
         App a = new App();
         Logger.getLogger("org.mongodb.driver").setLevel(Level.WARNING);
         String s = "mongodb+srv://Bharath:bharath12345678@movie.jeait.mongodb.net/test?retryWrites=true&w=majority";
         try(MongoClient mongoClient = MongoClients.create(s))
         {
-            printDatabases(mongoClient);
+            /*printDatabases(mongoClient);
             insert(mongoClient);
             many(mongoClient);
             a.delete(mongoClient);
-            update(mongoClient);
-            printall(mongoClient);
-            finduser(mongoClient,s,s1);
-            findadmin(mongoClient,s,s1);
+            update(mongoClient);*/
+            a.printall(mongoClient);
+            //finduser(mongoClient,s);
+//            findadmin(mongoClient,s,s1);
         }
 
-    }*/
+    }
 
     public FindIterable<Document> finduser(MongoClient mongoClient, String s) {
         MongoCollection<Document> record = mongoClient.getDatabase("test").getCollection("person");
@@ -43,14 +47,8 @@ public class App
 
     public void printall(MongoClient mongoClient) {
         MongoCollection<Document> record = mongoClient.getDatabase("test").getCollection("person");
-        FindIterable<Document> iterDoc = record.find();
-        int i = 1;
-        // Getting the iterator
-        Iterator it = iterDoc.iterator();
-        while (it.hasNext()) {
-            System.out.println(it.next());
-            i++;
-        }
+        Document doc = record.find(Filters.eq("name", "gokzi")).first();
+        System.out.println(doc.getString("password"));
     }
 
     public void update(MongoClient mongoClient) {
